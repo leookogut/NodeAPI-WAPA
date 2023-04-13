@@ -42,6 +42,39 @@ app.get("/products", async (req, res) => {
     }
 });
 
+app.get("/productsdate", async (req, res) => {
+    try {
+        const products = await Product.find({
+            createdAt: {
+                $gte: new Date("2015-10-01T00:00:00.000Z"),
+                $lt: new Date("2024-03-13T16:17:36.470Z"),
+            },
+        });
+        res.status(200).json(products);
+    } catch (error) {
+        res.status(500).json({ message: error.message });
+    }
+});
+
+app.get("/query", async (req, res) => {
+    try {
+        const products = await Product.find(req.body);
+        res.status(200).json(products);
+    } catch (error) {
+        res.status(500).json({ message: error.message });
+    }
+});
+
+app.get("/products/:id", async (req, res) => {
+    try {
+        const { id } = req.params;
+        const product = await Product.findById(id);
+        res.status(200).json(product);
+    } catch (error) {
+        res.status(500).json({ message: error.message });
+    }
+});
+
 app.get("/products/:id", async (req, res) => {
     try {
         const { id } = req.params;
@@ -111,7 +144,7 @@ app.post("/webhook", async function (req, res) {
     res.status(200);
 });
 */
-
+/*
 app.post("/webhook", async function (req, res) {
     console.log("Mensagem: ", JSON.stringify(req.body, null, " "));
     if (!req.body.statuses) {
@@ -158,7 +191,7 @@ app.post("/webhook", async function (req, res) {
     }
     res.status(200);
 });
-
+*/
 async function sendMessage(phone, response) {
     try {
         let payload = await axios.post(
