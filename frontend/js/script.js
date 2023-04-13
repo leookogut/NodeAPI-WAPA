@@ -3,9 +3,10 @@ const addForm = document.querySelector(".add-form");
 //const inputTask = document.querySelector(".input-task");
 //const inputQtd = document.querySelector(".input-task2");
 //const inputPrice = document.querySelector(".input-task3");
+const hostURL = process.env.CLOUD_URL;
 
 const fetchTasks = async () => {
-    const response = await fetch("http://localhost:3000/products");
+    const response = await fetch(`${hostURL}/products`);
     const tasks = await response.json();
     return tasks;
 };
@@ -19,7 +20,7 @@ const addTask = async (event) => {
         price: inputPrice.value,
     };
 
-    await fetch("http://localhost:3000/products", {
+    await fetch(`${hostURL}/products`, {
         method: "post",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(task),
@@ -32,7 +33,7 @@ const addTask = async (event) => {
 };
 
 const deleteTask = async (id) => {
-    await fetch(`http://localhost:3000/products/${id}`, {
+    await fetch(`${hostURL}/products/${id}`, {
         method: "delete",
     });
 
@@ -40,7 +41,7 @@ const deleteTask = async (id) => {
 };
 
 const updateTask = async ({ id, title, status }) => {
-    await fetch(`http://localhost:3000/products/${id}`, {
+    await fetch(`${hostURL}/products/${id}`, {
         method: "put",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ title, status }),
