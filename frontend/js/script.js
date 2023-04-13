@@ -3,7 +3,7 @@ const addForm = document.querySelector(".add-form");
 //const inputTask = document.querySelector(".input-task");
 //const inputQtd = document.querySelector(".input-task2");
 //const inputPrice = document.querySelector(".input-task3");
-const hostURL = process.env.CLOUD_URL;
+const hostURL = "https://cautious-cuff-links-wasp.cyclic.app";
 
 const fetchTasks = async () => {
     const response = await fetch(`${hostURL}/products`);

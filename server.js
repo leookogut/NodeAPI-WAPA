@@ -9,7 +9,7 @@ const namespace = process.env.NAMESPACE;
 const Sandbox_user_phone = process.env.SANDBOX_RECIPIENT_PHONE;
 const Sandbox_msgURL = process.env.SANDBOX_MESSAGES_URL;
 const Sandbox_accessToken = process.env.SANDBOX_AUTH_KEY_VALUE;
-const Sandbox_namespace = process.env.NAMESPACE;
+const Sandbox_namespace = process.env.SANDBOX_NAMESPACE;
 
 const express = require("express");
 const cors = require("cors");
