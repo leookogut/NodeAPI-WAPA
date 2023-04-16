@@ -144,54 +144,89 @@ app.post("/webhook", async function (req, res) {
     res.status(200);
 });
 */
-/*
+
+const formatDate = (dateUTC) => {
+    const options = { dateStyle: "long", timeStyle: "short" };
+    const date = new Date(dateUTC).toLocaleString("pt-br", options);
+    return date;
+};
+
+const minutes_difference = (timestamp1, timestamp2) => {
+    let difference = timestamp1 - timestamp2;
+    let min_diff = Math.floor(difference / 1000 / 60);
+    return min_diff;
+};
+
+const message_minutes_passed = (message_timestamp) => {
+    let messageTime = new Date(message_timestamp * 1000);
+    let nowTime = Math.floor(Date.now());
+    let minutes_passed = minutes_difference(nowTime, messageTime);
+    return minutes_passed;
+};
+
 app.post("/webhook", async function (req, res) {
+    res.status(200);
+
     console.log("Mensagem: ", JSON.stringify(req.body, null, " "));
+
+    //await new Promise((r) => setTimeout(r, 5000));
+
     if (!req.body.statuses) {
         let phone = req.body.messages[0].from;
         let name = req.body.contacts[0].profile.name;
+
         let receivedMessage;
         let response;
 
         let type = req.body.messages[0].type;
 
-        if (type == "text") {
-            //console.log("texto");
-            receivedMessage = req.body.messages[0].text.body;
-        } else if (type == "button") {
-            //console.log("button reply");
-            receivedMessage = req.body.messages[0].button.text;
-        } else {
-            receivedMessage =
-                "Desculpe, responda apenas clicando nos botões ou com texto.";
-        }
+        let timestamp = parseInt(req.body.messages[0].timestamp);
+        console.log(timestamp);
 
-        if (receivedMessage == "Sim, já transferi") {
-            response = `Ok, estamos preparando o envio do Pix, ${name}`;
+        let minutes_passed = message_minutes_passed(timestamp);
+        console.log(minutes_passed);
 
-            const task = {
-                seller_name: name,
-                seller_phone: phone,
-            };
+        //await new Promise((r) => setTimeout(r, 5000));
 
-            console.log(JSON.stringify(task));
+        if (minutes_passed <= 15) {
+            if (type == "text") {
+                //console.log("texto");
+                receivedMessage = req.body.messages[0].text.body;
+            } else if (type == "button") {
+                //console.log("button reply");
+                receivedMessage = req.body.messages[0].button.text;
+            } else {
+                receivedMessage =
+                    "Desculpe, responda apenas clicando nos botões ou com texto.";
+            }
 
-            await fetch("http://localhost:3000/products", {
-                method: "post",
-                headers: { "Content-Type": "application/json" },
-                body: JSON.stringify(task),
-            });
-        } else {
-            response = `Ola, Recebemos sua mensagem: ${receivedMessage}, ${phone}, ${name}`;
+            if (receivedMessage == "Sim, já transferi") {
+                response = `Ok, estamos preparando o envio do Pix, ${name}`;
+
+                const task = {
+                    seller_name: name,
+                    seller_phone: phone,
+                };
+
+                console.log(JSON.stringify(task));
+
+                await fetch(`http://localhost:${PORT}/products`, {
+                    method: "post",
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify(task),
+                });
+            } else {
+                response = `Ola, Recebemos sua mensagem: ${receivedMessage}, ${phone}, ${name}`;
+            }
         }
 
         await sendMessage(phone, response);
+        //await new Promise((r) => setTimeout(r, 5000));
         await sendMessageSandbox(Sandbox_user_phone, response);
         //await sendMessageTemplate(phone, response);
     }
-    res.status(200);
 });
-*/
+
 async function sendMessage(phone, response) {
     try {
         let payload = await axios.post(
@@ -296,4 +331,4 @@ mongoose
         console.log(error);
     });
 
-//ssh -R ingressogarantido:80:localhost:3000 serveo.net
+//ssh -R ingressogarantido:80:localhost:8080 serveo.net
