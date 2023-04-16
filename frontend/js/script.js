@@ -3,9 +3,9 @@ const addForm = document.querySelector(".add-form");
 //const inputTask = document.querySelector(".input-task");
 //const inputQtd = document.querySelector(".input-task2");
 //const inputPrice = document.querySelector(".input-task3");
-//const hostURL = "https://cautious-cuff-links-wasp.cyclic.app";
+const hostURL = "https://silver-harp-seal-sari.cyclic.app";
 
-const hostURL = "http://localhost:8080";
+//const hostURL = "http://localhost:8080";
 
 const fetchTasks = async () => {
     const response = await fetch(`${hostURL}/products`);
