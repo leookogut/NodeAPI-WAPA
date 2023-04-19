@@ -221,7 +221,7 @@ app.post("/webhook", async function (req, res) {
 
                 await axios
                     .post(`${hostURL}/products`, {
-                        task,
+                        body: JSON.stringify(task),
                         headers: { "Content-Type": "application/json" },
                     })
                     .then((res) => {
