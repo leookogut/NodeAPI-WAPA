@@ -212,11 +212,24 @@ app.post("/webhook", async function (req, res) {
                 console.log(JSON.stringify(task));
 
                 //await fetch(`http://localhost:${PORT}/products`, {
+                /*
                 await fetch(`${hostURL}/products`, {
                     method: "post",
                     headers: { "Content-Type": "application/json" },
                     body: JSON.stringify(task),
-                });
+                });*/
+
+                await axios
+                    .post(`${hostURL}/products`, {
+                        task,
+                        headers: { "Content-Type": "application/json" },
+                    })
+                    .then((res) => {
+                        console.log("RESPONSE RECEIVED: ", res);
+                    })
+                    .catch((err) => {
+                        console.log("AXIOS ERROR: ", err);
+                    });
             } else {
                 response = `Ola, Recebemos sua mensagem: ${receivedMessage}, ${phone}, ${name}`;
             }
