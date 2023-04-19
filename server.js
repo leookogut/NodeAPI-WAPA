@@ -10,6 +10,7 @@ const Sandbox_user_phone = process.env.SANDBOX_RECIPIENT_PHONE;
 const Sandbox_msgURL = process.env.SANDBOX_MESSAGES_URL;
 const Sandbox_accessToken = process.env.SANDBOX_AUTH_KEY_VALUE;
 const Sandbox_namespace = process.env.SANDBOX_NAMESPACE;
+const hostURL = process.env.HOST_URL;
 
 const express = require("express");
 const cors = require("cors");
@@ -210,7 +211,8 @@ app.post("/webhook", async function (req, res) {
 
                 console.log(JSON.stringify(task));
 
-                await fetch(`http://localhost:${PORT}/products`, {
+                //await fetch(`http://localhost:${PORT}/products`, {
+                await fetch(`${hostURL}/products`, {
                     method: "post",
                     headers: { "Content-Type": "application/json" },
                     body: JSON.stringify(task),
