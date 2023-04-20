@@ -42,7 +42,7 @@ const axiosConfig = {
 
 app.get("/products", async (req, res) => {
     try {
-        const products = await Product.find({});
+        const products = await Product.find({}).sort({ _id: 1 });
         res.status(200).json(products);
     } catch (error) {
         res.status(500).json({ message: error.message });
@@ -161,8 +161,6 @@ app.post("/webhook", async function (req, res) {
 
     console.log("Mensagem: ", JSON.stringify(req.body, null, " "));
 
-    //await new Promise((r) => setTimeout(r, 5000));
-
     if (!req.body.statuses) {
         let phone = req.body.messages[0].from;
         let name = req.body.contacts[0].profile.name;
@@ -178,14 +176,10 @@ app.post("/webhook", async function (req, res) {
         let minutes_passed = message_minutes_passed(timestamp);
         console.log(minutes_passed);
 
-        //await new Promise((r) => setTimeout(r, 5000));
-
         if (minutes_passed <= 15) {
             if (type == "text") {
-                //console.log("texto");
                 receivedMessage = req.body.messages[0].text.body;
             } else if (type == "button") {
-                //console.log("button reply");
                 receivedMessage = req.body.messages[0].button.text;
             } else {
                 receivedMessage =
@@ -193,7 +187,7 @@ app.post("/webhook", async function (req, res) {
             }
 
             if (receivedMessage == "Sim, já transferi") {
-                response = `Ok, estamos preparando o envio do Pix, ${name}`;
+                response = `Ok! Estamos preparando o envio do Pix, ${name}`;
 
                 const task = {
                     seller_name: name,
@@ -333,5 +327,3 @@ mongoose
     .catch((error) => {
         console.log(error);
     });
-
-//ssh -R ingressogarantido:80:localhost:8080 serveo.net

@@ -33,7 +33,12 @@ const disparoWA = mongoose.Schema(
         },
         seller_phone: {
             type: String,
-            required: true,
+            required: [true, "Please enter seller phone"],
+        },
+        status: {
+            type: String,
+            required: false,
+            default: "pendente",
         },
     },
     {

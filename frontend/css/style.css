@@ -58,16 +58,25 @@ table {
     width: 100%;
 }
 
+.titulo-tabela {
+    color: #000000;
+    font-weight: 800;
+}
+
 td,
 th {
-    padding: 10px 15px;
+    padding: 8px 4px;
     border: 1px solid #ddd;
     text-align: center;
+    font-weight: 700;
+    color: #000000;
+    font-size: 14px;
 }
 
 td {
-    color: #333;
-    font-weight: 600;
+    color: #272727;
+    font-weight: 500;
+    font-size: 14px;
 }
 
 tr:nth-child(even) {
@@ -75,7 +84,7 @@ tr:nth-child(even) {
 }
 
 select {
-    width: 100%;
+    width: 90%;
     border: none;
     padding: 10px;
     border-radius: 8px;
@@ -99,11 +108,11 @@ select:hover {
     cursor: pointer;
 }
 
-.btn-action:nth-child(1) {
+/*.btn-action:nth-child(1) {
     background-color: orange;
     margin-right: 5px;
-}
+}*/
 
-.btn-action:nth-child(2) {
+.btn-action:nth-child(1) {
     background-color: rgba(237, 42, 42, 0.9);
 }

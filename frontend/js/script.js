@@ -42,18 +42,19 @@ const deleteTask = async (id) => {
     loadTasks();
 };
 
-const updateTask = async ({ id, title, status }) => {
-    await fetch(`${hostURL}/products/${id}`, {
+const updateTask = async ({ _id, status }) => {
+    console.log(_id, status);
+    await fetch(`${hostURL}/products/${_id}`, {
         method: "put",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ title, status }),
+        body: JSON.stringify({ status }),
     });
 
     loadTasks();
 };
 
 const formatDate = (dateUTC) => {
-    const options = { dateStyle: "long", timeStyle: "short" };
+    const options = { dateStyle: "short", timeStyle: "short" };
     const date = new Date(dateUTC).toLocaleString("pt-br", options);
     return date;
 };
@@ -76,7 +77,7 @@ const createSelect = (value) => {
     const options = `
       <option value="pendente">pendente</option>
       <option value="em andamento">em andamento</option>
-      <option value="concluída">concluída</option>
+      <option value="concluido">concluída</option>
     `;
 
     const select = createElement("select", "", options);
@@ -87,7 +88,8 @@ const createSelect = (value) => {
 };
 
 const createRow = (task) => {
-    const { _id, seller_name, seller_phone, createdAt, updatedAt } = task;
+    const { _id, seller_name, seller_phone, status, createdAt, updatedAt } =
+        task;
 
     const tr = createElement("tr");
     const tdId = createElement("td", _id);
@@ -95,13 +97,14 @@ const createRow = (task) => {
     const tdCreatedAt = createElement("td", formatDate(createdAt));
     const tdPhone = createElement("td", seller_phone);
     const tdStatus = createElement("td");
+    const tdUpdatedAt = createElement("td", formatDate(updatedAt));
     const tdActions = createElement("td");
 
-    const select = createSelect(formatDate(updatedAt));
+    const select = createSelect(status);
 
-    select.addEventListener("change", ({ target }) =>
-        updateTask({ ...task, updatedAt: target.value })
-    );
+    select.addEventListener("change", ({ target }) => {
+        updateTask({ _id, status: target.value });
+    });
 
     const editButton = createElement(
         "button",
@@ -123,7 +126,7 @@ const createRow = (task) => {
     editForm.addEventListener("submit", (event) => {
         event.preventDefault();
 
-        updateTask({ _id, seller_name: editInput.value, updatedAt });
+        updateTask({ _id, seller_name: editInput.value, status });
     });
 
     editButton.addEventListener("click", () => {
@@ -138,7 +141,7 @@ const createRow = (task) => {
 
     tdStatus.appendChild(select);
 
-    tdActions.appendChild(editButton);
+    //tdActions.appendChild(editButton);
     tdActions.appendChild(deleteButton);
 
     tr.appendChild(tdId);
@@ -146,6 +149,7 @@ const createRow = (task) => {
     tr.appendChild(tdTitle);
     tr.appendChild(tdPhone);
     tr.appendChild(tdStatus);
+    tr.appendChild(tdUpdatedAt);
     tr.appendChild(tdActions);
 
     return tr;
@@ -170,4 +174,4 @@ function timedRefresh(timeoutPeriod) {
     setTimeout("location.reload(true);", timeoutPeriod);
 }
 
-window.onload = timedRefresh(20000);
+window.onload = timedRefresh(120000);
