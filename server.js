@@ -34,6 +34,12 @@ app.get("/", (req, res) => {
     res.send("Hello NODE API");
 });
 
+const axiosConfig = {
+    headers: {
+        "Content-Type": "application/json",
+    },
+};
+
 app.get("/products", async (req, res) => {
     try {
         const products = await Product.find({});
@@ -220,15 +226,12 @@ app.post("/webhook", async function (req, res) {
                 });*/
 
                 await axios
-                    .post(`${hostURL}/products`, {
-                        body: JSON.stringify(task),
-                        headers: { "Content-Type": "application/json" },
-                    })
+                    .post(`${hostURL}/products`, task, axiosConfig)
                     .then((res) => {
-                        console.log("RESPONSE RECEIVED: ", res);
+                        console.log("MONGO RESPONSE RECEIVED: ", res);
                     })
                     .catch((err) => {
-                        console.log("AXIOS ERROR: ", err);
+                        console.log("MONGO AXIOS ERROR: ", err);
                     });
             } else {
                 response = `Ola, Recebemos sua mensagem: ${receivedMessage}, ${phone}, ${name}`;
