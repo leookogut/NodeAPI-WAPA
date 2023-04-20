@@ -137,21 +137,6 @@ app.delete("/products/:id", async (req, res) => {
     }
 });
 
-/*
-app.post("/webhook", async function (req, res) {
-    console.log("Mensagem recebida: ", JSON.stringify(req.body, null, " "));
-    if (!req.body.statuses) {
-        let phone = req.body.messages[0].from;
-        let receivedMessage = req.body.messages[0].text.body;
-        let response = `Ola, Recebemos sua mensagem: ${receivedMessage}`;
-        //await sendMessageSandbox(phone, response);
-        await sendMessage(phone, response);
-        await sendMessageTemplate(phone, response);
-    }
-    res.status(200);
-});
-*/
-
 const formatDate = (dateUTC) => {
     const options = { dateStyle: "long", timeStyle: "short" };
     const date = new Date(dateUTC).toLocaleString("pt-br", options);
@@ -228,7 +213,7 @@ app.post("/webhook", async function (req, res) {
                 await axios
                     .post(`${hostURL}/products`, task, axiosConfig)
                     .then((res) => {
-                        console.log("MONGO RESPONSE RECEIVED: ", res);
+                        console.log("MONGO UPDATED");
                     })
                     .catch((err) => {
                         console.log("MONGO AXIOS ERROR: ", err);
