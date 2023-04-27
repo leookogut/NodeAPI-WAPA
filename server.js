@@ -213,7 +213,7 @@ app.post("/webhook", async function (req, res) {
                         console.log("MONGO AXIOS ERROR: ", err);
                     });
             } else {
-                response = `Ola, Recebemos sua mensagem: ${receivedMessage}, ${phone}, ${name}`;
+                response = await sendTemplate_Help(phone, name);
             }
         }
 
@@ -297,6 +297,45 @@ async function sendMessageTemplate(phone, response) {
                                 {
                                     type: "text",
                                     text: `${response}`,
+                                },
+                            ],
+                        },
+                    ],
+                },
+            },
+            {
+                headers: {
+                    "D360-API-KEY": accessToken,
+                },
+            }
+        );
+        return payload.data;
+    } catch (error) {
+        console.log(error);
+    }
+}
+
+async function sendTemplate_Help(phone, name) {
+    try {
+        let payload = await axios.post(
+            msgURL,
+            {
+                to: phone,
+                type: "template",
+                template: {
+                    namespace: namespace,
+                    language: {
+                        policy: "deterministic",
+                        code: "pt_BR",
+                    },
+                    name: "get_help",
+                    components: [
+                        {
+                            type: "body",
+                            parameters: [
+                                {
+                                    type: "text",
+                                    text: `${name}`,
                                 },
                             ],
                         },
